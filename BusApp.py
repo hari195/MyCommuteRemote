@@ -7,11 +7,7 @@ import os
 from getpass import getpass
 import PIL
 import serial
-
-#ser=serial.Serial('/dev/ttyACM1',9600)
-#ser.write('T')
-
-
+import json
 
 scanner = zbar.ImageScanner()
 scanner.parse_config('enable')
@@ -24,6 +20,10 @@ previous_data = "NULL2"
 
 #Send get request with U/P as payload
 #Extract token from response
+#url='https://www.google.com'
+#payload={'some':'data'}
+#r=requests.post(url, data=json.dumps(payload))
+
 #Use that token for further communications
 
 
@@ -44,8 +44,13 @@ while(True):
 
 		if str(symbol.data) !=  previous_data:
 		   #Send POST request with data as payload and token from login
-		   #Check response for validity. If valid allow passenger and display pop up message
-		   #If not valid, sound alarm
+
+
+           #Check response for validity. If valid allow passenger and display pop up message
+           #ser=serial.Serial('/dev/ttyACM1',9600)
+           #ser.write('T')
+
+           #If not valid, sound alarm
 		   #os.system("/usr/bin/canberra-gtk-play --id='system-ready'")
    		   #os.system("/usr/bin/canberra-gtk-play --id='alarm-clock-elapsed'")
 
