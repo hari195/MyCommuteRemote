@@ -31,7 +31,7 @@ previous_data = "NULL2"
 
 while(True):
     #trigger=ser.readline()
-    #if trigger == "D":
+    #if trigger == "K":
 
     #    break
     # else:
@@ -56,6 +56,9 @@ while(True):
            #Check response for validity. If valid allow passenger and display pop up message
 
            #ser.write('T')
+           #while ser.readline()!='D':
+           #   time.sleep(0.5)
+
 
            #If not valid, sound alarm
 		   #os.system("/usr/bin/canberra-gtk-play --id='system-ready'")
@@ -70,5 +73,5 @@ while(True):
 
 
 
+        cv2.destroyAllWindows()
 cap.release()
-cv2.destroyAllWindows()
