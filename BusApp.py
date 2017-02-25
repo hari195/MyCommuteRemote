@@ -112,7 +112,7 @@ while True:
 
                     #os.system("notify-send -t 900 \"WELCOME!!\" \"NAME\"")
                     ser.write('T')
-                    time.sleep(5)
+                    time.sleep(2)
                     previous_data = symbol.data
                     print "Servo rotates"
                     #while ser.readline()[0]!='D':
