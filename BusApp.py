@@ -17,6 +17,8 @@ password = getpass()
 cap = cv2.VideoCapture(0)
 data = "NULL"
 previous_data = "NULL2"
+#Setting up Serial connection with Arduino
+#ser=serial.Serial('/dev/ttyACM1',9600)
 
 #Send get request with U/P as payload
 #Extract token from response
@@ -28,6 +30,11 @@ previous_data = "NULL2"
 
 
 while(True):
+    #trigger=ser.readline()
+    #if trigger == "D":
+
+    #    break
+    # else:
 
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -47,7 +54,7 @@ while(True):
 
 
            #Check response for validity. If valid allow passenger and display pop up message
-           #ser=serial.Serial('/dev/ttyACM1',9600)
+
            #ser.write('T')
 
            #If not valid, sound alarm
