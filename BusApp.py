@@ -14,8 +14,8 @@ from Tkinter import Label, Tk
 
 
 #root = Tk()
-a=0
 
+odo_delta = 0
 scanner = zbar.ImageScanner()
 scanner.parse_config('enable')
 busUsername = raw_input("Username: ")
@@ -43,12 +43,13 @@ ser=serial.Serial('/dev/ttyACM0',9600)
 while True:
     if ser.inWaiting():
         trigger=ser.readline()
+        print "port "
         print trigger
         if trigger[0] == 'K':
 
             odo_delta = ser.readline()
             print "Got K!!"
-            print odo_delta
+            print int(odo_delta)
             #cv2.destroyAllWindows()
             #send odo to server
 
@@ -73,6 +74,15 @@ while True:
                     #Send POST request with data as payload and token from login
                     #Check response for validity. If valid allow passenger and display pop up message
                     print symbol.data
+                    url='http://192.168.43.14:8000/api/readqr/'
+                    #payload={"username":busUsername,"password":busPassword,"rname":"busRoute"}
+                    payload={"userid":symbol.data,"reading":int(odo_delta)}
+                    req = urllib2.Request(url)
+                    req.add_header('Content-Type', 'application/json')
+                    req.add_header('Authorization', 'Token ' + bustoken)
+                    response = urllib2.urlopen(req, json.dumps(payload))
+                    print response.read()
+
                     os.system("notify-send -t 900 \"WELCOME!!\" \"NAME\"")
 
                     previous_data = symbol.data

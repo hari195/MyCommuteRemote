@@ -1,5 +1,5 @@
 #include<Servo.h>
-int odo[20]={0,2,0,4,0,6,0,7,0,8,0,9,0,10,0,12,0,13,0,14};
+int odo[20]={2,0,4,0,6,0,7,0,8,0,9,0,10,0,12,0,13,0,14,0};
 int a=1;
 int stopcount = 0;
 Servo ser;
@@ -29,12 +29,12 @@ if(inByte == 'T')
 
  
 //Serial.println(digitalRead(2));
-if(!digitalRead(2) && a%2!=0)
+if(!digitalRead(2))
 {
   
  a++; 
 Serial.println('K'); 
-Serial.println(odo[stopcount%5]);
+Serial.println(odo[stopcount]);
 stopcount++;
 delay(1000);
 }
