@@ -8,15 +8,15 @@ from getpass import getpass
 import PIL
 import serial
 import json
-import requests
 import urllib2
 import ast
 
 scanner = zbar.ImageScanner()
 scanner.parse_config('enable')
-username = raw_input("Username: ")
-password = getpass()
+busUsername = raw_input("Username: ")
+busPassword = getpass()
 url='http://192.168.43.14:8000/api-token-auth/'
+#payload={"username":busUsername,"password":busPassword}
 payload={"username":"kl15ab2233","password":"lalalala"}
 #r=requests.post(url, data=json.dumps(payload))
 
@@ -32,6 +32,8 @@ bustoken = b['token']
 cap = cv2.VideoCapture(0)
 data = "NULL"
 previous_data = "NULL2"
+
+
 #Setting up Serial connection with Arduino
 #ser=serial.Serial('/dev/ttyACM1',9600)
 
@@ -44,12 +46,16 @@ previous_data = "NULL2"
 #Use that token for further communications
 
 
-while(True):
-    #trigger=ser.readline()
-    #if trigger == "K":
+while True:
+    trigger=ser.readline()
+    if trigger == "K":
+        cv2.destroyAllWindows()
+        odo_delta = ser.readline()
+        #send odo to server
+        print "Odo sent to server"
+        while ser.readline() !='K':
+        print "Received stop trigger. resuming scan mode.."
 
-    #    break
-    # else:
 
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -88,5 +94,5 @@ while(True):
 
 
 
-        cv2.destroyAllWindows()
+cv2.destroyAllWindows()
 cap.release()
