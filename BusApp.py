@@ -10,25 +10,26 @@ import serial
 import json
 import urllib2
 import ast
+from Tkinter import Label, Tk
 
+
+#root = Tk()
 a=0
 
 scanner = zbar.ImageScanner()
 scanner.parse_config('enable')
 busUsername = raw_input("Username: ")
 busPassword = getpass()
-url='http://192.168.43.14:8000/api-token-auth/'
-#payload={"username":busUsername,"password":busPassword}
-payload={"username":"kl15ab2233","password":"lalalala"}
-#r=requests.post(url, data=json.dumps(payload))
-
-#req = urllib2.Request(url)
-#req.add_header('Content-Type', 'application/json')
-
-#response = urllib2.urlopen(req, json.dumps(payload))
-#b =ast.literal_eval(response.read())
-#bustoken = b['token']
-
+busRoute = raw_input("Route name: ")
+url='http://192.168.43.14:8000/api/buslogin/'
+#payload={"username":busUsername,"password":busPassword,"rname":"busRoute"}
+payload={"username":"kl15ab2233","password":"lalalala","rname":"335E"}
+req = urllib2.Request(url)
+req.add_header('Content-Type', 'application/json')
+response = urllib2.urlopen(req, json.dumps(payload))
+b =ast.literal_eval(response.read())
+bustoken = b['token']
+print bustoken
 
 
 cap = cv2.VideoCapture(0)
@@ -62,6 +63,8 @@ while True:
     width,height = pil.size
     raw=pil.tostring()
     img=zbar.Image(width,height,'Y800',raw)
+    cv2.namedWindow("frame", cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty("frame", cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
     cv2.imshow('frame',gray)
     scanner.scan(img)
     for symbol in img:
@@ -69,6 +72,11 @@ while True:
                 if str(symbol.data) !=  previous_data:
                     #Send POST request with data as payload and token from login
                     #Check response for validity. If valid allow passenger and display pop up message
+                    print symbol.data
+                    os.system("notify-send -t 900 \"WELCOME!!\" \"NAME\"")
+
+                    previous_data = symbol.data
+
                     ser.write('T')
                     time.sleep(2)
                     print "Servo rotates"
@@ -77,9 +85,7 @@ while True:
                     #If not valid, sound alarm
                     #os.system("/usr/bin/canberra-gtk-play --id='system-ready'")
                     #os.system("/usr/bin/canberra-gtk-play --id='alarm-clock-elapsed'")
-                    print symbol.data
-                    os.system("notify-send -t 900 \"WELCOME!!\" \"NAME\"")
-                    previous_data = symbol.data
+
     del(img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
