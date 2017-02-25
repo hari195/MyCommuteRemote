@@ -20,12 +20,12 @@ url='http://192.168.43.14:8000/api-token-auth/'
 payload={"username":"kl15ab2233","password":"lalalala"}
 #r=requests.post(url, data=json.dumps(payload))
 
-req = urllib2.Request(url)
-req.add_header('Content-Type', 'application/json')
+#req = urllib2.Request(url)
+#req.add_header('Content-Type', 'application/json')
 
-response = urllib2.urlopen(req, json.dumps(payload))
-b =ast.literal_eval(response.read())
-bustoken = b['token']
+#response = urllib2.urlopen(req, json.dumps(payload))
+#b =ast.literal_eval(response.read())
+#bustoken = b['token']
 
 
 
@@ -35,7 +35,7 @@ previous_data = "NULL2"
 
 
 #Setting up Serial connection with Arduino
-#ser=serial.Serial('/dev/ttyACM1',9600)
+ser=serial.Serial('/dev/ttyACM0',9600)
 
 #Send get request with U/P as payload
 #Extract token from response
@@ -48,12 +48,17 @@ previous_data = "NULL2"
 
 while True:
     trigger=ser.readline()
-    if trigger == "K":
-        cv2.destroyAllWindows()
+    print trigger
+    if trigger[0] == 'K':
         odo_delta = ser.readline()
+        print "Got K!!"
+        #cv2.destroyAllWindows()
+
         #send odo to server
         print "Odo sent to server"
-        while ser.readline() !='K':
+        while ser.readline()[0] !='K':
+            q=10
+
         print "Received stop trigger. resuming scan mode.."
 
 

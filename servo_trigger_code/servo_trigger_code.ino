@@ -6,6 +6,7 @@ Servo ser;
 int pos = 0;
 void setup() {
   ser.attach(9);
+  pinMode(2,INPUT);
 Serial.begin(9600); // set the baud rate
 // print "Ready" once
 }
@@ -22,13 +23,16 @@ if(inByte == 'T')
      Serial.println('D');
 }
 
-a = digitalRead(2);
-
+//Serial.println(digitalRead(2));
+if(!digitalRead(2))
+{
+  
 Serial.println('K'); 
 Serial.println(odo[stopcount%5]);
 stopcount++;
+delay(1000);
+}
 
-
-
-delay(1000); // delay for 1/10 of a second
+Serial.println('Q');
+delay(100); // delay for 1/10 of a second
 }

@@ -1,6 +1,6 @@
 import serial
 import time
-ser=serial.Serial('/dev/ttyACM1',9600)
+ser=serial.Serial('/dev/ttyACM0',9600)
 
 while True:
 
@@ -10,4 +10,4 @@ while True:
     if a[0]=='K':
         odo=ser.readline()
         print odo[0]
-    time.sleep(3)
+    time.sleep(0.5)
