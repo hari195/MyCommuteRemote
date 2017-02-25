@@ -1,6 +1,6 @@
 #include<Servo.h>
-int odo[5]={1,3,4,2,1};
-int a;
+int odo[20]={0,2,0,4,0,6,0,7,0,8,0,9,0,10,0,12,0,13,0,14};
+int a=1;
 int stopcount = 0;
 Servo ser;
 int pos = 0;
@@ -13,26 +13,34 @@ Serial.begin(9600); // set the baud rate
 void loop() {
 char inByte = ' ';
  // only send data back if data has been sent
-//char inByte = Serial.read(); // read the incoming data
+ if(Serial.available()){
+inByte = Serial.read(); // read the incoming data
 if(inByte == 'T')
 {
   //Perform servo rotation
    for (int i=0;i<180;i++)
      {ser.write(i);delay(10);}  
      ser.write(0);
-     Serial.println('D');
+    
+   
+    //Serial.println('D');
 }
+ }
 
+ 
 //Serial.println(digitalRead(2));
-if(!digitalRead(2))
+if(!digitalRead(2) && a%2!=0)
 {
   
+ a++; 
 Serial.println('K'); 
 Serial.println(odo[stopcount%5]);
 stopcount++;
 delay(1000);
 }
 
-Serial.println('Q');
+else {a++;}
+
+//Serial.println('Q');
 delay(100); // delay for 1/10 of a second
 }
