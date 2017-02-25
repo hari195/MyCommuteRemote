@@ -8,11 +8,26 @@ from getpass import getpass
 import PIL
 import serial
 import json
+import requests
+import urllib2
+import ast
 
 scanner = zbar.ImageScanner()
 scanner.parse_config('enable')
 username = raw_input("Username: ")
 password = getpass()
+url='http://192.168.43.14:8000/api-token-auth/'
+payload={"username":"kl15ab2233","password":"lalalala"}
+#r=requests.post(url, data=json.dumps(payload))
+
+req = urllib2.Request(url)
+req.add_header('Content-Type', 'application/json')
+
+response = urllib2.urlopen(req, json.dumps(payload))
+b =ast.literal_eval(response.read())
+bustoken = b['token']
+
+
 
 cap = cv2.VideoCapture(0)
 data = "NULL"
