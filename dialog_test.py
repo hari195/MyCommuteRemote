@@ -1,12 +1,12 @@
 from Tkinter import *
 
 def callback():
-    print("hi")
     print E1.get()
     print E2.get()
     print E3.get()
+
     top.destroy()
-v="dfw"
+
 top = Tk()
 
 w = 400 # width for the Tk root
@@ -29,10 +29,8 @@ top.geometry('%dx%d+%d+%d' % (w, h, x, y))
 top.title("MyCommute - Driver Login")
 L1 = Label(top, text="User Name",anchor='center',pady=20,padx=50)
 L1.grid(row=0, column=0)
-E1 = Entry(top, bd = 5, textvariable=v)
+E1 = Entry(top, bd = 5)
 E1.grid(row=0, column=1)
-print E1.get()
-
 
 L2 = Label(top, text="Password",anchor='center',pady=10)
 L2.grid(row=1, column=0)
@@ -43,7 +41,6 @@ L3 = Label(top, text="Bus Route",anchor='center',pady=20)
 L3.grid(row=2, column=0)
 E3 = Entry(top, bd = 5)
 E3.grid(row=2, column=1)
-
 
 MyButton1 = Button(top, text="Submit", width=10, command=callback)
 MyButton1.grid(row=4, column=1)
