@@ -74,8 +74,8 @@ busRoute=a[2]
 """
 
 url='http://192.168.43.14:8000/api/buslogin/'
-#payload={"username":busUsername,"password":busPassword,"rname":"busRoute"}
-payload={"username":"kl15aa2211","password":"lalalala","rname":"335E"}
+payload={"username":busUsername,"password":busPassword,"rname":"busRoute"}
+#payload={"username":"kl15aa2211","password":"lalalala","rname":"335E"}
 req = urllib2.Request(url)
 req.add_header('Content-Type', 'application/json')
 response = urllib2.urlopen(req, json.dumps(payload))
@@ -101,7 +101,7 @@ while True:
 
             odo_delta = ser.readline()
 
-            print int(odo_delta)
+            #print int(odo_delta)
             #cv2.destroyAllWindows()
             #send odo to server
 
@@ -124,16 +124,33 @@ while True:
                 if str(symbol.data) != previous_data:
                     #Send POST request with data as payload and token from login
                     #Check response for validity. If valid allow passenger and display pop up message
-                    print symbol.data
+                    #print symbol.data
                     url='http://192.168.43.14:8000/api/readqr/'
                     #payload={"username":busUsername,"password":busPassword,"rname":"busRoute"}
                     payload={"userid":symbol.data,"reading":int(odo_delta)}
                     req = urllib2.Request(url)
                     req.add_header('Content-Type', 'application/json')
                     req.add_header('Authorization', 'Token ' + bustoken)
-                    response = urllib2.urlopen(req, json.dumps(payload))
+                    flag = 0
+                    try :
+                        response = urllib2.urlopen(req, json.dumps(payload))
+
+                    except:
+                        response="Invalid QR Code"
+                        flag =1
+                    if flag == 1:
+                        prompt = response
+                        flag=0
+                    else:
+                        prompt = response.read()
+
 
                     root =Tk()
+                    label1 = Label(root, text=prompt,font=("Helvetica",32 ), width=len(prompt))
+                    label1.config(anchor='center',pady=70)
+                    label1.pack()
+
+
                     w = 800 # width for the Tk root
                     h = 200 # height for the Tk root
 
@@ -148,31 +165,29 @@ while True:
                     # set the dimensions of the screen
                     # and where it is placed
                     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-
-
-
                     root.title("MyCommute")
-                    prompt = response.read()
-                    label1 = Label(root, text=prompt,font=("Helvetica",32 ), width=len(prompt))
-                    label1.config(anchor='center',pady=70)
-                    label1.pack()
+
 
                     def close_after_2s():
                         root.destroy()
 
                     root.after(2000, close_after_2s)
                     root.mainloop()
+                    if response == "Invalid QR Code":
+                        os.system("/usr/bin/canberra-gtk-play --id='alarm-clock-elapsed'")
+                        previous_data=symbol.data
+                    else :
 
-                    #os.system("notify-send -t 900 \"WELCOME!!\" \"NAME\"")
-                    ser.write('T')
-                    time.sleep(2)
-                    previous_data = symbol.data
+                        os.system("/usr/bin/canberra-gtk-play --id='system-ready'")
+                        #os.system("notify-send -t 900 \"WELCOME!!\" \"NAME\"")
+                        ser.write('T')
+                        time.sleep(2)
+                        previous_data = symbol.data
 
-                    #while ser.readline()[0]!='D':
-                    #    q=10
-                    #If not valid, sound alarm
-                    #os.system("/usr/bin/canberra-gtk-play --id='system-ready'")
-                    #os.system("/usr/bin/canberra-gtk-play --id='alarm-clock-elapsed'")
+                        #while ser.readline()[0]!='D':
+                        #    q=10
+                        #If not valid, sound alarm
+
 
     del(img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
