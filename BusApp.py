@@ -12,13 +12,67 @@ import urllib2
 import ast
 from Tkinter import *
 
-
 odo_delta = 0
 scanner = zbar.ImageScanner()
 scanner.parse_config('enable')
+
+
 busUsername = raw_input("Username: ")
 busPassword = getpass()
 busRoute = raw_input("Route name: ")
+
+"""
+
+a = []
+def callback():
+    a.append(E1.get())
+    a.append(E2.get())
+    a.append(E3.get())
+    top.destroy()
+
+top = Toplevel()
+
+w = 400 # width for the Tk root
+h = 200 # height for the Tk root
+
+# get screen width and height
+ws = top.winfo_screenwidth() # width of the screen
+hs = top.winfo_screenheight() # height of the screen
+
+# calculate x and y coordinates for the Tk root window
+x = (ws/2) - (w/2)
+y = (hs/2) - (h/2)
+
+# set the dimensions of the screen
+# and where it is placed
+top.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+top.title("MyCommute - Driver Login")
+L1 = Label(top, text="User Name",anchor='center',pady=20,padx=50)
+L1.grid(row=0, column=0)
+E1 = Entry(top, bd = 5)
+E1.grid(row=0, column=1)
+
+L2 = Label(top, text="Password",anchor='center',pady=10)
+L2.grid(row=1, column=0)
+E2 = Entry(top, bd = 5, show='*')
+E2.grid(row=1, column=1)
+
+L3 = Label(top, text="Bus Route",anchor='center',pady=20)
+L3.grid(row=2, column=0)
+E3 = Entry(top, bd = 5)
+E3.grid(row=2, column=1)
+
+MyButton1 = Button(top, text="Submit", width=10, command=callback)
+MyButton1.grid(row=4, column=1)
+
+top.mainloop()
+
+busUsername=a[0]
+busPassword=a[1]
+busRoute=a[2]
+"""
+
 url='http://192.168.43.14:8000/api/buslogin/'
 #payload={"username":busUsername,"password":busPassword,"rname":"busRoute"}
 payload={"username":"kl15aa2211","password":"lalalala","rname":"335E"}
@@ -27,7 +81,7 @@ req.add_header('Content-Type', 'application/json')
 response = urllib2.urlopen(req, json.dumps(payload))
 b =ast.literal_eval(response.read())
 bustoken = b['token']
-print bustoken
+
 
 
 cap = cv2.VideoCapture(0)
@@ -41,20 +95,19 @@ ser=serial.Serial('/dev/ttyACM0',9600)
 while True:
     if ser.inWaiting():
         trigger=ser.readline()
-        print "port "
-        print trigger
+
+
         if trigger[0] == 'K':
 
             odo_delta = ser.readline()
-            print "Got K!!"
+
             print int(odo_delta)
             #cv2.destroyAllWindows()
             #send odo to server
 
             while ser.readline()[0] !='K':
                 q=10
-            print "Received stop trigger. resuming scan mode.."
-            print "Odo sent to server"
+
             previous_data="NULL2"
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -80,7 +133,7 @@ while True:
                     req.add_header('Authorization', 'Token ' + bustoken)
                     response = urllib2.urlopen(req, json.dumps(payload))
 
-                    root = Tk()
+                    root =Tk()
                     w = 800 # width for the Tk root
                     h = 200 # height for the Tk root
 
@@ -114,7 +167,7 @@ while True:
                     ser.write('T')
                     time.sleep(2)
                     previous_data = symbol.data
-                    print "Servo rotates"
+
                     #while ser.readline()[0]!='D':
                     #    q=10
                     #If not valid, sound alarm

@@ -1,9 +1,9 @@
 from Tkinter import *
-
+a = []
 def callback():
-    print E1.get()
-    print E2.get()
-    print E3.get()
+    a.append(E1.get())
+    a.append(E2.get())
+    a.append(E3.get())
 
     top.destroy()
 
@@ -45,4 +45,7 @@ E3.grid(row=2, column=1)
 MyButton1 = Button(top, text="Submit", width=10, command=callback)
 MyButton1.grid(row=4, column=1)
 
+
 top.mainloop()
+
+print a[0]
